@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { ADRESS } from "./constants"
-import { INews } from "./types"
+import { Links } from "./constants"
+import { INews, INewsState, IErrors } from "./types"
 
 export const getArticles = createAsyncThunk(
   "news/getArticles",
   async (_, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        ADRESS.base + ADRESS.articles + ADRESS.limit + "100"
+        Links.server + Links.articles + Links.limit + Links.amount
       )
 
       if (!response.ok) {
@@ -22,18 +22,9 @@ export const getArticles = createAsyncThunk(
   }
 )
 
-interface NewsState {
-  articles: INews[]
-  errors: errors
-  load: boolean
-}
-interface errors {
-  code: number
-  message: string
-}
-const initialState: NewsState = {
+const initialState: INewsState = {
   articles: [],
-  errors: {} as errors,
+  errors: {} as IErrors,
   load: false,
 }
 
@@ -47,11 +38,11 @@ const News = createSlice({
       (state, action: PayloadAction<INews[]>) => {
         state.articles = [...action.payload]
         state.load = true
-        state.errors = {} as errors
+        state.errors = {} as IErrors
       }
     )
     builder.addCase(getArticles.rejected, (state, action) => {
-      state.errors = { ...(action.payload as errors) }
+      state.errors = { ...(action.payload as IErrors) }
       state.load = false
     })
   },

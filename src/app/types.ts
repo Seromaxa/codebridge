@@ -20,3 +20,19 @@ export interface INews {
     }
   ]
 }
+export interface INewsState {
+  articles: INews[]
+  errors: IErrors
+  load: boolean
+}
+export interface IErrors {
+  code: number
+  message: string
+}
+export interface ICard {
+  imagen?: string
+  title: string
+  description: string
+  date: string
+  id: number
+}

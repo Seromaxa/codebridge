@@ -1,0 +1,28 @@
+.imagen {
+  position: relative;
+}
+.imagen::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: url("../../assets/imagens/arnaud-kleindienst-spaceship3.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.date {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  font-size: 14px;
+  color: #363636;
+  opacity: 0.6;
+}
+
+.date svg {
+  width: 15px;
+  height: 15px;
+  margin-right: 9px;
+}
