@@ -1,13 +1,19 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { Links } from "./constants"
+import {setRender} from './utilts'
 import { INews, INewsState, IErrors } from "./types"
+import type { RootState } from './store'
+
+
 
 export const getArticles = createAsyncThunk(
   "news/getArticles",
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, getState }) => {
+   const {limit,page}:INewsState = (getState() as RootState).news 
+  
     try {
       const response = await fetch(
-        Links.server + Links.articles + Links.limit + Links.amount
+        Links.server + Links.articles + Links.limit +limit + Links.start + page
       )
 
       if (!response.ok) {
@@ -24,21 +30,34 @@ export const getArticles = createAsyncThunk(
 
 const initialState: INewsState = {
   articles: [],
+  render:[],
+  search:'',
+  result:0,
   errors: {} as IErrors,
   load: false,
+  limit:15,
+  page:0
 }
 
 const News = createSlice({
   name: "news",
   initialState,
-  reducers: {},
+  reducers: {
+    searching(state,action){
+      state.search = action.payload
+      setRender(state,action.payload)
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(
       getArticles.fulfilled,
       (state, action: PayloadAction<INews[]>) => {
-        state.articles = [...action.payload]
+        state.articles.push(...action.payload)
         state.load = true
-        state.errors = {} as IErrors
+        state.page = state.page + state.limit
+        state.errors = {} as IErrors  
+        setRender(state,state.search)  
+           
       }
     )
     builder.addCase(getArticles.rejected, (state, action) => {
@@ -47,5 +66,5 @@ const News = createSlice({
     })
   },
 })
-
+export const {searching} =News.actions
 export default News.reducer

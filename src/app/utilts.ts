@@ -26,6 +26,8 @@ export const lenghOfString = (text: string, symbols: number = 100) => {
     lastWord = newString.length - 1
     newString[lastWord] = newString[lastWord] + last
     return newString.join(" ")
+  } else {
+    return text
   }
 }
 
@@ -88,4 +90,83 @@ export const formatDate = (date: string): string => {
   }
 
   return `${month} ${day}, ${formDate.getFullYear()}`
+}
+
+
+export const setRender = (state:any,action:any) =>{
+  let search = new RegExp(action,'gi')
+  let buffer = state.articles.reduce((acc: any, item: any) => {
+    if (
+      item.title.match(search) &&
+      action.length > 3
+    ) {
+      if (!acc.name) {
+        acc.name = [
+          {
+            ...item,
+            summary: lenghOfString(item.summary),
+            publishedAt: formatDate(item.publishedAt),
+          },
+        ]
+      } else {
+        acc.name.push({
+          ...item,
+          summary: lenghOfString(item.summary),
+          publishedAt: formatDate(item.publishedAt),
+        })
+      }
+    } else if (
+      item.summary.match(search) &&
+      action.length > 3
+    ) {
+      if (!acc.body) {
+        acc.body = [ 
+          {
+            ...item,
+            summary: lenghOfString(item.summary),
+            publishedAt: formatDate(item.publishedAt),
+          },
+        ]
+      } else {
+        acc.body.push({
+          ...item,
+          summary: lenghOfString(item.summary),
+          publishedAt: formatDate(item.publishedAt),
+        })
+      }
+    } else {
+      if (!acc.not) {
+        acc.not = [
+          {
+            ...item,
+            summary: lenghOfString(item.summary),
+            publishedAt: formatDate(item.publishedAt),
+          },
+        ]
+      } else {
+        acc.not.push({
+          ...item,
+          summary: lenghOfString(item.summary),
+          publishedAt: formatDate(item.publishedAt),
+        })
+      }
+    }
+    return acc
+  }, {})
+  if (buffer) {
+    if (buffer.name && buffer.body) {
+      state.result =(buffer.name.length + buffer.body.length)
+      state.render =[...buffer.name, ...buffer.body]
+    } else if (buffer.name) {
+      state.result =(buffer.name.length)
+      state.render =[...buffer.name]
+    } else if (buffer.body) {
+      state.result =buffer.body.length
+      state.render = [...buffer.body]
+    } else if (!buffer.name && !buffer.body) {
+      state.result = 0
+      state.render =[...buffer.not]
+    }
+  }
+
 }

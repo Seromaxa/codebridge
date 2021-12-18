@@ -22,8 +22,13 @@ export interface INews {
 }
 export interface INewsState {
   articles: INews[]
+  render:INews[]
+  search:string
+  result:number
   errors: IErrors
   load: boolean
+  limit:number
+  page:number
 }
 export interface IErrors {
   code: number
@@ -35,4 +40,5 @@ export interface ICard {
   description: string
   date: string
   id: number
+  
 }

@@ -3,7 +3,21 @@
   flex-wrap: wrap;
   list-style: none;
   justify-content: space-evenly;
+  padding: 0;
   li {
     margin-bottom: 45px;
+  }
+}
+
+.active {
+  animation: vision 0.4 linear;
+}
+
+@keyframes vision {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }
