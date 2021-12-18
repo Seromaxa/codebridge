@@ -19,9 +19,8 @@ const NewsCard = ({ imagen, title, description, date, id }: ICard) => {
 const text = useAppSelector(state=>state.news.search)
 const [search,setSearch] =  useState<string[]>([]) 
 useEffect(()=>{
-  if(text.length > 3){
     setSearch(text.split(/\s/).filter(item=>item))
-  }
+
 },[text])
 
   return (
@@ -50,15 +49,7 @@ useEffect(()=>{
           <Skeleton width="15%" />
         )}
         {title ? (
-          // <Typography
-          //   variant="h6"
-          //   sx={{
-          //     marginBottom: 2.5,
-          //     fontFamily: "Montserrat",
-          //   }}
-          // >
-          //   {title}
-          // </Typography>
+    
           <Highlighter 
           searchWords={search}
           textToHighlight={title}
